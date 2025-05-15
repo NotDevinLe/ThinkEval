@@ -58,7 +58,7 @@ function evaluate(model) {
     fetch("games.json")
     .then(response => response.json())
     .then(data => {
-        game = data[Math.floor(Math.random() * games.length)];
+        game = data[Math.floor(Math.random() * data.length)];
     })
     .catch(error => {
         console.error("Error loading JSON:", error);
