@@ -53,16 +53,10 @@ evaluateBtn.addEventListener("click", function() {
     buttonsContainer.append(voteModel2)
 })
 
-function evaluate(model) {
-    let game = [];
-    fetch("games.json")
-    .then(response => response.json())
-    .then(data => {
-        game = data[Math.floor(Math.random() * data.length)];
-    })
-    .catch(error => {
-        console.error("Error loading JSON:", error);
-    });
+async function evaluate(model) {
+    const response = await fetch("games.json");
+    const data = await response.json();
+    const game = data[Math.floor(Math.random() * data.length)];
 
     let randomized = [];
 
