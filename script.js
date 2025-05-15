@@ -61,51 +61,53 @@ async function evaluate(model) {
     let randomized = [];
 
     for (const category in game) {
-        for (const word in category) {
+        for (const word of game[category]) {
             randomized.push(word);
         }
     }
 
-    randomized = shuffle(randomized)
+    randomized = shuffle(randomized);
 
     let input = `Given ${JSON.stringify(randomized)}, can you find a way to make 4 groups of 4 words based on their category? Only return the final answer with the four words with whitespace between them.`;
     let score = 0;
-    // Simulate a game
+
     for (let i = 0; i < 4; i++) {
-        // Call api here with a four word sequence with white space
-        const output = "";
+        // call your backend API
+        const res = await fetch("https://your-backend-url.com/api/handler", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: input })
+        });
+
+        const data = await res.json();
+        const output = data.choices[0].message.content.trim();
         const group = output.split(" ");
 
-        const correct_guesses = [0, 0, 0, 0]
-        
-        // Compute the categories it got correct
-        for (const guess in group) {
+        const correct_guesses = [0, 0, 0, 0];
+
+        for (const guess of group) {
             let cat = 0;
             for (const category in game) {
                 for (let j = 0; j < 4; j++) {
-                    if (game[category][j] == guess) {
+                    if (game[category][j] === guess) {
                         correct_guesses[cat]++;
                     }
                 }
+                cat++;
             }
-            cat++;
-        }
 
-        const highest = Math.max(...correct_guesses)
+        const highest = Math.max(...correct_guesses);
 
-        if (highest == 4) {
-            for (let j = 0; j < randomized.length; j++) {
-                for (let k = 0; k < 4; k++) {
-                    if (randomized[j] == group[k]) {
-                        randomized.splice(j, 1)
-                    }
+        if (highest === 4) {
+            for (let j = randomized.length - 1; j >= 0; j--) {
+                if (group.includes(randomized[j])) {
+                    randomized.splice(j, 1);
                 }
             }
-            input = `You got a group correct! Find the next grouping for ${JSON.stringify(randomized)}`;
+            input = `You got a group correct! Find the next grouping for ${JSON.stringify(randomized)}.`;
             score++;
-        }
-        else {
-            input = `You are ${4 - Math.max(...correct_guesses)} word(s) away from a corect grouping. Repeat the process with ${JSON.stringify(randomized)}.`    
+        } else {
+            input = `You are ${4 - highest} word(s) away from a correct grouping. Repeat the process with ${JSON.stringify(randomized)}.`;
         }
     }
 }
@@ -116,4 +118,5 @@ function shuffle(array) {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-  }
+    }
+}
