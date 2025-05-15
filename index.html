@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThinkingEval</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <script src="script.js" defer type="module"></script>
 </head>
 <body>
   <h1>Evaluate a Model:</h1>
@@ -22,8 +22,8 @@
       </select>
     <div class="chatbox">
     </div>
-      <button class="submit">Evaluate</button>
-      <p>Score: </p>
+      <button id="evaluate" class="submit">Evaluate</button>
+      <p id="score">Score: </p>
     <h1>Leaderboard</h1>
     <div class="leaderboard-box">
         <div class="leaderboard-entry">1. BART-MNLI</div>
