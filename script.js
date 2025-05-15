@@ -40,11 +40,13 @@ evaluateBtn.addEventListener("click", function() {
     voteModel1.textContent = 'Vote Model 1';
     voteModel1.className = 'submit';
     voteModel1.id = 'vote-model-1';
+    voteModel1.type = 'button'
 
     const voteModel2 = document.createElement('button');
     voteModel2.textContent = 'Vote Model 2';
     voteModel2.className = 'submit';
     voteModel2.id = 'vote-model-2';
+    voteModel2.type = 'button'
 
     const buttonsContainer = document.getElementById("buttons")
     buttonsContainer.append(voteModel1)
