@@ -1,5 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+
+import {
+  collection,
+  getDocs,
+  query,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+
 
 
 // Setting up the database
@@ -36,21 +45,21 @@ evaluateBtn.addEventListener("click", function() {
     evaluate(model1);
     evaluate(model2);
 
-    const voteModel1 = document.createElement('button');
-    voteModel1.textContent = 'Vote Model 1';
-    voteModel1.className = 'vote';
-    voteModel1.id = 'vote-model-1';
-    voteModel1.type = 'button'
+    // const voteModel1 = document.createElement('button');
+    // voteModel1.textContent = 'Vote Model 1';
+    // voteModel1.className = 'vote';
+    // voteModel1.id = 'vote-model-1';
+    // voteModel1.type = 'button'
 
-    const voteModel2 = document.createElement('button');
-    voteModel2.textContent = 'Vote Model 2';
-    voteModel2.className = 'vote';
-    voteModel2.id = 'vote-model-2';
-    voteModel2.type = 'button'
+    // const voteModel2 = document.createElement('button');
+    // voteModel2.textContent = 'Vote Model 2';
+    // voteModel2.className = 'vote';
+    // voteModel2.id = 'vote-model-2';
+    // voteModel2.type = 'button'
 
-    const buttonsContainer = document.getElementById("buttons")
-    buttonsContainer.append(voteModel1)
-    buttonsContainer.append(voteModel2)
+    // const buttonsContainer = document.getElementById("buttons")
+    // buttonsContainer.append(voteModel1)
+    // buttonsContainer.append(voteModel2)
 })
 
 async function evaluate(model) {
@@ -120,3 +129,77 @@ function shuffle(array) {
     return array;
     }
 }
+
+const vote1Btn = document.getElementById("vote-model-1");
+const vote2Btn = document.getElementById("vote-model-2");
+
+vote1Btn.addEventListener("click", async () => {
+    const model1 = document.getElementById("model-select-1").value;
+    await addDoc(collection(db, "Votes"), {
+        votedFor: model1,
+        modelPosition: "left",
+        timestamp: Date.now()
+    });
+    console.log("Voted for:", model1);
+});
+
+vote2Btn.addEventListener("click", async () => {
+    const model2 = document.getElementById("model-select-2").value;
+    await addDoc(collection(db, "Votes"), {
+        votedFor: model2,
+        modelPosition: "right",
+        timestamp: Date.now()
+    });
+    console.log("Voted for:", model2);
+});
+
+// async function updateLeaderboard() {
+//   const votesRef = collection(db, "Votes");
+//   const snapshot = await getDocs(votesRef); 
+//   const voteCounts = {};
+
+//   snapshot.forEach(doc => {
+//     const model = doc.data().votedFor;
+//     if (voteCounts[model]) {
+//       voteCounts[model]++;
+//     } else {
+//       voteCounts[model] = 1;
+//     }
+//   });
+
+//   const sortedModels = Object.entries(voteCounts)
+//     .sort((a, b) => b[1] - a[1]);
+
+//   const leaderboardBox = document.getElementById("leaderboard-box");
+//   leaderboardBox.innerHTML = "";
+
+//   sortedModels.forEach(([model, count], index) => {
+//     const entry = document.createElement("div");
+//     entry.className = "leaderboard-entry";
+//     entry.textContent = `${index + 1}. ${model} (${count} votes)`;
+//     leaderboardBox.appendChild(entry);
+//   });
+// }
+
+
+// update leader board
+
+onSnapshot(collection(db, "Votes"), (snapshot) => {
+  const voteCounts = {};
+  snapshot.forEach(doc => {
+    const model = doc.data().votedFor;
+    voteCounts[model] = (voteCounts[model] || 0) + 1;
+  });
+
+  const sortedModels = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
+
+  const leaderboardBox = document.getElementById("leaderboard-box");
+  leaderboardBox.innerHTML = "";
+
+  sortedModels.forEach(([model, count], index) => {
+    const entry = document.createElement("div");
+    entry.className = "leaderboard-entry";
+    entry.textContent = `${index + 1}. ${model} (${count} votes)`;
+    leaderboardBox.appendChild(entry);
+  });
+});
