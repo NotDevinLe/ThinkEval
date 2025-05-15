@@ -27,10 +27,31 @@ const db = getFirestore(app);
 //   console.log("No such document!");
 // }
 
-const evaluate = document.getElementById("evaluate");
-const modelScore = document.getElementById("score");
+const evaluateBtn = document.getElementById("evaluate");
 
-evaluate.addEventListener("click", function() {
+evaluateBtn.addEventListener("click", function() {
+    const model1 = document.getElementById("model-select-1").value
+    const model2 = document.getElementById("model-select-2").value
+
+    evaluate(model1);
+    evaluate(model2);
+
+    const voteModel1 = document.createElement('button');
+    voteModel1.textContent = 'Vote Model 1';
+    voteModel1.className = 'submit';
+    voteModel1.id = 'vote-model-1';
+
+    const voteModel2 = document.createElement('button');
+    voteModel2.textContent = 'Vote Model 2';
+    voteModel2.className = 'submit';
+    voteModel2.id = 'vote-model-2';
+
+    const buttonsContainer = document.getElementById("buttons")
+    buttonsContainer.append(voteModel1)
+    buttonsContainer.append(voteModel2)
+})
+
+function evaluate(model) {
     let game = [];
     fetch("games.json")
     .then(response => response.json())
@@ -40,8 +61,6 @@ evaluate.addEventListener("click", function() {
     .catch(error => {
         console.error("Error loading JSON:", error);
     });
-    
-    const model = document.getElementById("model-select").value;
 
     let randomized = [];
 
@@ -93,8 +112,7 @@ evaluate.addEventListener("click", function() {
             input = `You are ${4 - Math.max(...correct_guesses)} word(s) away from a corect grouping. Repeat the process with ${JSON.stringify(randomized)}.`    
         }
     }
-    modelScore.innerHTML = score;
-})
+}
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {

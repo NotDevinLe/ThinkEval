@@ -8,22 +8,46 @@
     <script src="script.js" defer type="module"></script>
 </head>
 <body>
-  <h1>Evaluate a Model:</h1>
-    <p>Instructions: We have 700 unique puzzles for this model to be tested on. Choose your model and watch as it tries to reason and solve below.</p>
-    
-    <label for="model-select">Choose a model:</label>
-    <select id="model-select" name="model">
-        <option value="bart-mnli">BART-MNLI</option>
-        <option value="ada-002">ADA-002</option>
-        <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
-        <option value="flan-ul2">Flan-UL2</option>
-        <option value="llama-2">LLAMA-2</option>
-        <option value="gpt-4">GPT-4</option>
-      </select>
-    <div class="chatbox">
-    </div>
-      <button id="evaluate" class="submit">Evaluate</button>
-      <p id="score">Score: </p>
+  <div class="evaluate-container">
+    <h1>Evaluate a Model:</h1>
+      <p>Instructions: We have 700 unique puzzles for this model to be tested on. Choose your model and watch as it tries to reason and solve below.</p>
+      <div class="arena">
+        <div class="model-col">
+          <label for="model-select-1">Choose a model:</label>
+          <select id="model-select-1" name="model">
+              <option value="bart-mnli">BART-MNLI</option>
+              <option value="ada-002">ADA-002</option>
+              <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+              <option value="flan-ul2">Flan-UL2</option>
+              <option value="llama-2">LLAMA-2</option>
+              <option value="gpt-4">GPT-4</option>
+            </select>
+          <div class="chatbox">
+          </div>  
+        </div>
+        
+        <div class="model-col">
+          <label for="model-select-2">Choose a model:</label>
+              <select id="model-select-2" name="model">
+                  <option value="bart-mnli">BART-MNLI</option>
+                  <option value="ada-002">ADA-002</option>
+                  <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+                  <option value="flan-ul2">Flan-UL2</option>
+                  <option value="llama-2">LLAMA-2</option>
+                  <option value="gpt-4">GPT-4</option>
+                </select>
+              <div class="chatbox">
+              </div>  
+        </div>
+        
+      </div>
+
+        <div class="buttons">
+          <button id="evaluate" class="submit">Evaluate</button>
+        </div>
+        
+  </div>
+  
     <h1>Leaderboard</h1>
     <div class="leaderboard-box">
         <div class="leaderboard-entry">1. BART-MNLI</div>
