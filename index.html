@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinkingEval</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+  <h1>Evaluate a Model:</h1>
+    <p>Instructions: We have 700 unique puzzles for this model to be tested on. Choose your model and watch as it tries to reason and solve below.</p>
+    
+    <label for="model-select">Choose a model:</label>
+    <select id="model-select" name="model">
+        <option value="bart-mnli">BART-MNLI</option>
+        <option value="ada-002">ADA-002</option>
+        <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+        <option value="flan-ul2">Flan-UL2</option>
+        <option value="llama-2">LLAMA-2</option>
+        <option value="gpt-4">GPT-4</option>
+      </select>
+    <div class="chatbox">
+    </div>
+      <button class="submit">Evaluate</button>
+      <p>Score: </p>
+    <h1>Leaderboard</h1>
+    <div class="leaderboard-box">
+        <div class="leaderboard-entry">1. BART-MNLI</div>
+        <div class="leaderboard-entry">2. ADA-002</div>
+        <div class="leaderboard-entry">3. All-MPNet Base-v2</div>
+        <div class="leaderboard-entry">4. Flan-UL2</div>
+        <div class="leaderboard-entry">5. LLAMA-2</div>
+        <div class="leaderboard-entry">6. GPT-4</div>
+      </div>
+</body>
+</html>
