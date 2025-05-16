@@ -33,8 +33,8 @@ evaluateBtn.addEventListener("click", function() {
     const model1 = document.getElementById("model-select-1").value
     const model2 = document.getElementById("model-select-2").value
 
-    evaluate(model1);
-    evaluate(model2);
+    evaluate(model1, "left");
+    evaluate(model2, "right");
 
     // const voteModel1 = document.createElement('button');
     // voteModel1.textContent = 'Vote Model 1';
@@ -53,73 +53,81 @@ evaluateBtn.addEventListener("click", function() {
     // buttonsContainer.append(voteModel2)
 })
 
-async function evaluate(model) {
-    const response = await fetch("games.json");
-    const data = await response.json();
-    const game = data[Math.floor(Math.random() * data.length)];
+async function evaluate(model, side) {
+  const response = await fetch("games.json");
+  const data = await response.json();
+  const game = data[Math.floor(Math.random() * data.length)];
 
-    let randomized = [];
+  let randomized = [];
 
-    for (const category in game) {
-        for (const word of game[category]) {
-            randomized.push(word);
-        }
+  for (const category in game) {
+    for (const word of game[category]) {
+      randomized.push(word);
+    }
+  }
+
+  randomized = shuffle(randomized);
+
+  let input = `Given ${JSON.stringify(randomized)}, can you find a way to make 4 groups of 4 words based on their category? Only return the final answer with the four words with whitespace between them.`;
+  let score = 0;
+
+  for (let i = 0; i < 4; i++) {
+    const res = await fetch("https://hf-backend-dusky.vercel.app/api/inference", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: input })
+    });
+
+    const data = await res.json();
+
+    if (!data.choices || !data.choices[0]) {
+      console.error("API error:", data);
+      return;
     }
 
-    randomized = shuffle(randomized);
+    const output = data.choices[0].message.content.trim();
 
-    let input = `Given ${JSON.stringify(randomized)}, can you find a way to make 4 groups of 4 words based on their category? Only return the final answer with the four words with whitespace between them.`;
-    let score = 0;
+    // ✅ DISPLAY THE OUTPUT
+    const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
+    const chatbox = document.querySelector(chatboxSelector);
 
-    for (let i = 0; i < 4; i++) {
-        // call your backend API
-        const res = await fetch("https://hf-backend-dusky.vercel.app/api/inference", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: input })
-        });
+    const messageDiv = document.createElement("div");
+    messageDiv.className = "chat-message model";
+    messageDiv.textContent = output;
+    chatbox.appendChild(messageDiv);
 
-        const data = await res.json();
+    // Your game grouping logic (unchanged below)...
+    const group = output.split(" ");
+    const correct_guesses = [0, 0, 0, 0];
 
-        if (!data.choices || !data.choices[0]) {
-            console.error("OpenAI API error or bad response:", data);
-            document.body.innerHTML += `<p style="color: red;">Model '${model}' failed to respond correctly. Check console for details.</p>`;
-            return;
+    for (const guess of group) {
+      let cat = 0;
+      for (const category in game) {
+        for (let j = 0; j < 4; j++) {
+          if (game[category][j] === guess) {
+            correct_guesses[cat]++;
+          }
         }
-
-        const output = data.choices[0].message.content.trim();
-
-        const group = output.split(" ");
-
-        const correct_guesses = [0, 0, 0, 0];
-
-        for (const guess of group) {
-            let cat = 0;
-            for (const category in game) {
-                for (let j = 0; j < 4; j++) {
-                    if (game[category][j] === guess) {
-                        correct_guesses[cat]++;
-                    }
-                }
-                cat++;
-            }
-
-        const highest = Math.max(...correct_guesses);
-
-        if (highest === 4) {
-            for (let j = randomized.length - 1; j >= 0; j--) {
-                if (group.includes(randomized[j])) {
-                    randomized.splice(j, 1);
-                }
-            }
-            input = `You got a group correct! Find the next grouping for ${JSON.stringify(randomized)}.`;
-            score++;
-        } else {
-            input = `You are ${4 - highest} word(s) away from a correct grouping. Repeat the process with ${JSON.stringify(randomized)}.`;
-        }
+        cat++;
+      }
     }
+
+    const highest = Math.max(...correct_guesses);
+
+    if (highest === 4) {
+      for (let j = randomized.length - 1; j >= 0; j--) {
+        if (group.includes(randomized[j])) {
+          randomized.splice(j, 1);
+        }
+      }
+      input = `You got a group correct! Find the next grouping for ${JSON.stringify(randomized)}.`;
+      score++;
+    } else {
+      input = `You are ${4 - highest} word(s) away from a correct grouping. Repeat the process with ${JSON.stringify(randomized)}.`;
+    }
+  }
 }
-}
+
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
