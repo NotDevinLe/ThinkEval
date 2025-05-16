@@ -35,6 +35,10 @@ evaluateBtn.addEventListener("click", () => {
   const model1 = randomizedModels[0];
   const model2 = randomizedModels[1];
 
+  // Show models
+  document.getElementById("model-name-1").textContent = `Model: ${model1}`;
+  document.getElementById("model-name-2").textContent = `Model: ${model2}`;
+
   // Update hidden selects for debugging visibility
   document.getElementById("model-select-1").value = model1;
   document.getElementById("model-select-2").value = model2;
@@ -158,7 +162,7 @@ onSnapshot(collection(db, "Votes"), (snapshot) => {
 });
 
 // Display Model Message
-function displayMessage(output, side, modelName) {
+function displayMessage(output, side) {
   const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
   const chatbox = document.querySelector(chatboxSelector);
 
@@ -173,13 +177,8 @@ function displayMessage(output, side, modelName) {
       index++;
       chatbox.scrollTop = chatbox.scrollHeight;
       setTimeout(typeNextChar, 30);
-    } else {
-      // After done typing, append model used info
-      const modelTag = document.createElement("div");
-      modelTag.className = "model-name-tag";
-      modelTag.textContent = `Model Used: ${modelName}`;
-      chatbox.appendChild(modelTag);
     }
   }
   typeNextChar();
 }
+
