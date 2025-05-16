@@ -13,8 +13,8 @@
       <p>Instructions: We have 700 unique puzzles for this model to be tested on. Choose your model and watch as it tries to reason and solve below.</p>
       <div class="arena">
         <div class="model-col">
-          <label for="model-select-1">Choose a model:</label>
-          <select id="model-select-1" name="model">
+          <label for="model-select-1" class="debug-label">Choose a model:</label>
+          <select id="model-select-1" name="model" class="debug-select">
               <option value="bart-mnli">BART-MNLI</option>
               <option value="ada-002">ADA-002</option>
               <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
@@ -22,23 +22,23 @@
               <option value="llama-2">LLAMA-2</option>
               <option value="gpt-4">GPT-4</option>
             </select>
-          <div class="chatbox">
-          </div>  
+          <div class="chatbox"></div>  
         </div>
+
         
         <div class="model-col">
-          <label for="model-select-2">Choose a model:</label>
-              <select id="model-select-2" name="model">
-                  <option value="bart-mnli">BART-MNLI</option>
-                  <option value="ada-002">ADA-002</option>
-                  <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
-                  <option value="flan-ul2">Flan-UL2</option>
-                  <option value="llama-2">LLAMA-2</option>
-                  <option value="gpt-4">GPT-4</option>
-                </select>
-              <div class="chatbox">
-              </div>  
+          <label for="model-select-2" class="debug-label">Choose a model:</label>
+          <select id="model-select-2" name="model" class="debug-select">
+              <option value="bart-mnli">BART-MNLI</option>
+              <option value="ada-002">ADA-002</option>
+              <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+              <option value="flan-ul2">Flan-UL2</option>
+              <option value="llama-2">LLAMA-2</option>
+              <option value="gpt-4">GPT-4</option>
+            </select>
+          <div class="chatbox"></div>  
         </div>
+
         
       </div>
 
@@ -46,6 +46,7 @@
           <button id="evaluate" class="submit" type="button">Evaluate</button>
           <button id="vote-model-1" class="vote" type="button">Vote Model 1</button>
           <button id="vote-model-2" class="vote" type="button">Vote Model 2</button>
+          <button id="debug-toggle" class="submit" type="button">Toggle Debug</button>
         </div>
         
   </div>

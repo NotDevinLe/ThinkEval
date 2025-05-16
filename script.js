@@ -27,31 +27,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const evaluateBtn = document.getElementById("evaluate");
+// const evaluateBtn = document.getElementById("evaluate");
 
-evaluateBtn.addEventListener("click", function() {
-    const model1 = document.getElementById("model-select-1").value
-    const model2 = document.getElementById("model-select-2").value
+// evaluateBtn.addEventListener("click", function() {
+//     const model1 = document.getElementById("model-select-1").value
+//     const model2 = document.getElementById("model-select-2").value
 
-    evaluate(model1, "left");
-    evaluate(model2, "right");
+//     evaluate(model1, "left");
+//     evaluate(model2, "right");
 
-    // const voteModel1 = document.createElement('button');
-    // voteModel1.textContent = 'Vote Model 1';
-    // voteModel1.className = 'vote';
-    // voteModel1.id = 'vote-model-1';
-    // voteModel1.type = 'button'
+//     // const voteModel1 = document.createElement('button');
+//     // voteModel1.textContent = 'Vote Model 1';
+//     // voteModel1.className = 'vote';
+//     // voteModel1.id = 'vote-model-1';
+//     // voteModel1.type = 'button'
 
-    // const voteModel2 = document.createElement('button');
-    // voteModel2.textContent = 'Vote Model 2';
-    // voteModel2.className = 'vote';
-    // voteModel2.id = 'vote-model-2';
-    // voteModel2.type = 'button'
+//     // const voteModel2 = document.createElement('button');
+//     // voteModel2.textContent = 'Vote Model 2';
+//     // voteModel2.className = 'vote';
+//     // voteModel2.id = 'vote-model-2';
+//     // voteModel2.type = 'button'
 
-    // const buttonsContainer = document.getElementById("buttons")
-    // buttonsContainer.append(voteModel1)
-    // buttonsContainer.append(voteModel2)
-})
+//     // const buttonsContainer = document.getElementById("buttons")
+//     // buttonsContainer.append(voteModel1)
+//     // buttonsContainer.append(voteModel2)
+// })
 
 async function evaluate(model, side) {
   const response = await fetch("games.json");
@@ -180,8 +180,31 @@ const allModels = [
   "all-mpnet-base-v2",
   "flan-ul2",
   "llama-2",
-  "gpt-3.5-turbo"
+  "gpt-4"
 ];
+
+const debugToggleBtn = document.getElementById("debug-toggle");
+debugToggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("debug-visible");
+});
+
+evaluateBtn.addEventListener("click", function() {
+    const randomizedModels = shuffle([...allModels]);
+
+    const model1 = randomizedModels[0];
+    const model2 = randomizedModels[1];
+
+    // Update hidden selects for debugging purposes
+    document.getElementById("model-select-1").value = model1;
+    document.getElementById("model-select-2").value = model2;
+
+    console.log(`Left model: ${model1}`);
+    console.log(`Right model: ${model2}`);
+
+    evaluate(model1, "left");
+    evaluate(model2, "right");
+});
+
 
 onSnapshot(collection(db, "Votes"), (snapshot) => {
   const voteCounts = {};

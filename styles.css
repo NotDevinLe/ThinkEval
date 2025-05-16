@@ -185,3 +185,12 @@ body {
   justify-content: center;
   margin-top: 2rem;
   }
+
+  .debug-label, .debug-select {
+    display: none;
+  }
+
+  .debug-visible .debug-label,
+  .debug-visible .debug-select {
+    display: block;
+  }
