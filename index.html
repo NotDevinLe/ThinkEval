@@ -16,10 +16,10 @@
     </p>
 
     <div class="arena">
-      <!-- Left Model Column -->
+      <!-- LEFT MODEL COL -->
       <div class="model-col">
         <label for="model-select-1" class="debug-label">Choose a model:</label>
-        <select id="model-select-1" class="debug-select">
+        <select id="model-select-1" name="model" class="debug-select">
           <option value="bart-mnli">BART-MNLI</option>
           <option value="ada-002">ADA-002</option>
           <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
@@ -31,10 +31,10 @@
         <div class="chatbox"></div>
       </div>
 
-      <!-- Right Model Column -->
+      <!-- RIGHT MODEL COL -->
       <div class="model-col">
         <label for="model-select-2" class="debug-label">Choose a model:</label>
-        <select id="model-select-2" class="debug-select">
+        <select id="model-select-2" name="model" class="debug-select">
           <option value="bart-mnli">BART-MNLI</option>
           <option value="ada-002">ADA-002</option>
           <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
@@ -55,9 +55,7 @@
     </div>
 
     <h1>Leaderboard</h1>
-    <div class="leaderboard-box" id="leaderboard-box">
-      <!-- Filled dynamically -->
-    </div>
+    <div class="leaderboard-box" id="leaderboard-box"></div>
   </div>
 </body>
 </html>
