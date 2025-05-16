@@ -56,6 +56,7 @@ evaluateBtn.addEventListener("click", function() {
 async function evaluate(model, side) {
   const response = await fetch("games.json");
   const data = await response.json();
+
   const game = data[Math.floor(Math.random() * data.length)];
 
   let randomized = [];
@@ -78,25 +79,36 @@ async function evaluate(model, side) {
       body: JSON.stringify({ prompt: input })
     });
 
-    const data = await res.json();
+    const apiData = await res.json();
 
-    if (!data.choices || !data.choices[0]) {
-      console.error("API error:", data);
+    if (!apiData.choices || !apiData.choices[0]) {
+      console.error("API error:", apiData);
       return;
     }
 
-    const output = data.choices[0].message.content.trim();
+    const output = apiData.choices[0].message.content.trim();
 
-    // ✅ DISPLAY THE OUTPUT
+    // DISPLAY THE OUTPUT
     const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
     const chatbox = document.querySelector(chatboxSelector);
 
     const messageDiv = document.createElement("div");
     messageDiv.className = "chat-message model";
-    messageDiv.textContent = output;
     chatbox.appendChild(messageDiv);
 
-    // Your game grouping logic (unchanged below)...
+    // Typing effect
+    let index = 0;
+    function typeNextChar() {
+      if (index < output.length) {
+        messageDiv.textContent += output.charAt(index);
+        index++;
+        chatbox.scrollTop = chatbox.scrollHeight;
+        setTimeout(typeNextChar, 30);
+      }
+    }
+    typeNextChar();
+
+    // Grouping logic
     const group = output.split(" ");
     const correct_guesses = [0, 0, 0, 0];
 
