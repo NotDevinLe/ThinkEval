@@ -39,9 +39,16 @@ evaluateBtn.addEventListener("click", () => {
   document.getElementById("model-name-1").textContent = `Model: ${model1}`;
   document.getElementById("model-name-2").textContent = `Model: ${model2}`;
 
-  // Update hidden selects for debugging visibility
-  document.getElementById("model-select-1").value = model1;
-  document.getElementById("model-select-2").value = model2;
+  // Only update selects if in debug mode (safe check)
+  if (document.body.classList.contains("debug-visible")) {
+    const select1 = document.getElementById("model-select-1");
+    const select2 = document.getElementById("model-select-2");
+
+    if (select1 && select2) {
+      select1.value = model1;
+      select2.value = model2;
+    }
+  }
 
   console.log(`Left model: ${model1}`);
   console.log(`Right model: ${model2}`);
