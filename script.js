@@ -31,28 +31,25 @@ debugToggleBtn.addEventListener("click", () => {
 
 // Evaluate Handler
 evaluateBtn.addEventListener("click", () => {
-  const randomizedModels = shuffle([...allModels]);
-  const model1 = randomizedModels[0];
-  const model2 = randomizedModels[1];
+  const debugVisible = document.body.classList.contains("debug-visible");
 
+  const model1 = debugVisible
+    ? document.getElementById("model-select-1").value
+    : shuffle([...allModels])[0];
 
-  // Only update selects if in debug mode (safe check)
-  if (document.body.classList.contains("debug-visible")) {
-    const select1 = document.getElementById("model-select-1");
-    const select2 = document.getElementById("model-select-2");
-
-    if (select1 && select2) {
-      select1.value = model1;
-      select2.value = model2;
-    }
-  }
+  const model2 = debugVisible
+    ? document.getElementById("model-select-2").value
+    : shuffle([...allModels])[1];
 
   console.log(`Left model: ${model1}`);
   console.log(`Right model: ${model2}`);
 
+  // No immediate name update! Names are shown after LLM outputs.
+
   evaluate(model1, "left", model1);
   evaluate(model2, "right", model2);
 });
+
 
 // Vote Handlers
 vote1Btn.addEventListener("click", async () => {
