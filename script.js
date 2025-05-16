@@ -86,7 +86,7 @@ async function evaluate(model, side) {
       return;
     }
 
-    const output = input;
+    const output = apiData.choices[0].message.content.trim();;
 
     // DISPLAY THE OUTPUT
     const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
