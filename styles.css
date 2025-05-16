@@ -194,3 +194,10 @@ body {
   .debug-visible .debug-select {
     display: block;
   }
+
+  .model-name-tag {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #6b7280; /* subtle gray */
+  font-style: italic;
+  }

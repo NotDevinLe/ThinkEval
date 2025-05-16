@@ -42,8 +42,8 @@ evaluateBtn.addEventListener("click", () => {
   console.log(`Left model: ${model1}`);
   console.log(`Right model: ${model2}`);
 
-  evaluate(model1, "left");
-  evaluate(model2, "right");
+  evaluate(model1, "left", model1);
+  evaluate(model2, "right", model2);
 });
 
 // Vote Handlers
@@ -68,7 +68,7 @@ vote2Btn.addEventListener("click", async () => {
 });
 
 // Evaluate Function
-async function evaluate(model, side) {
+async function evaluate(model, side, modelName) {
   const response = await fetch("games.json");
   const data = await response.json();
 
@@ -98,7 +98,7 @@ async function evaluate(model, side) {
     }
 
     const output = apiData.choices[0].message.content.trim();
-    displayMessage(output, side);
+    displayMessage(output, side, modelName);
 
     // Group Checking Logic
     const group = output.split(" ");
@@ -177,3 +177,29 @@ onSnapshot(collection(db, "Votes"), (snapshot) => {
     leaderboardBox.appendChild(entry);
   });
 });
+
+function displayMessage(output, side, modelName) {
+  const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
+  const chatbox = document.querySelector(chatboxSelector);
+
+  const messageDiv = document.createElement("div");
+  messageDiv.className = "chat-message model";
+  chatbox.appendChild(messageDiv);
+
+  let index = 0;
+  function typeNextChar() {
+    if (index < output.length) {
+      messageDiv.textContent += output.charAt(index);
+      index++;
+      chatbox.scrollTop = chatbox.scrollHeight;
+      setTimeout(typeNextChar, 30);
+    } else {
+      // After done typing, append model used info
+      const modelTag = document.createElement("div");
+      modelTag.className = "model-name-tag";
+      modelTag.textContent = `Model Used: ${modelName}`;
+      chatbox.appendChild(modelTag);
+    }
+  }
+  typeNextChar();
+}
