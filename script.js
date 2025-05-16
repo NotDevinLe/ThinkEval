@@ -84,7 +84,7 @@ async function evaluate(model) {
 
     for (let i = 0; i < 4; i++) {
         // call your backend API
-        const res = await fetch("https://your-backend-url.com/api/handler", {
+        const res = await fetch("https://hf-backend-dusky.vercel.app/api/inference", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prompt: input })
