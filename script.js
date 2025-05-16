@@ -35,9 +35,6 @@ evaluateBtn.addEventListener("click", () => {
   const model1 = randomizedModels[0];
   const model2 = randomizedModels[1];
 
-  // Show models
-  document.getElementById("model-name-1").textContent = `Model: ${model1}`;
-  document.getElementById("model-name-2").textContent = `Model: ${model2}`;
 
   // Only update selects if in debug mode (safe check)
   if (document.body.classList.contains("debug-visible")) {
@@ -169,9 +166,11 @@ onSnapshot(collection(db, "Votes"), (snapshot) => {
 });
 
 // Display Model Message
-function displayMessage(output, side) {
+function displayMessage(output, side, modelName) {
   const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
+  const modelNameSelector = side === "left" ? "#model-name-1" : "#model-name-2";
   const chatbox = document.querySelector(chatboxSelector);
+  const modelNameDiv = document.querySelector(modelNameSelector);
 
   const messageDiv = document.createElement("div");
   messageDiv.className = "chat-message model";
@@ -184,8 +183,12 @@ function displayMessage(output, side) {
       index++;
       chatbox.scrollTop = chatbox.scrollHeight;
       setTimeout(typeNextChar, 30);
+    } else {
+      // ✅ After finished typing, show the model name up top
+      modelNameDiv.textContent = `Model: ${modelName}`;
     }
   }
   typeNextChar();
 }
+
 
