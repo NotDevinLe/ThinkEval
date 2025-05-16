@@ -152,12 +152,27 @@ body {
   }
 
   button {
-    max-width: 100px;
-    max-height: 50px;
-    text-align: center;
+  width: 150px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
   }
 
   .buttons {
     display: flex;
     flex-direction: row;
+  }
+
+  #buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
   }
