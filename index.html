@@ -1,74 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThinkingEval</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer type="module"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThinkingEval</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer type="module"></script>
 </head>
 <body>
   <div class="evaluate-container">
     <h1>Evaluate a Model:</h1>
-      <p>Instructions: We have 700 unique puzzles for this model to be tested on. Choose your model and watch as it tries to reason and solve below.</p>
-      <div class="arena">
-        <div class="model-col">
-          <label for="model-select-1" class="debug-label">Choose a model:</label>
-          <select id="model-select-1" name="model" class="debug-select">
-              <option value="bart-mnli">BART-MNLI</option>
-              <option value="ada-002">ADA-002</option>
-              <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
-              <option value="flan-ul2">Flan-UL2</option>
-              <option value="llama-2">LLAMA-2</option>
-              <option value="gpt-4">GPT-4</option>
-          </select>
-          <div class="model-name" id="model-name-1"></div>
-          <div class="chatbox"></div>  
-        </div>
+    <p>
+      Instructions: We have 700 unique puzzles for this model to be tested on.
+      Choose your model and watch as it tries to reason and solve below.
+    </p>
 
-
-        
-        <div class="model-col">
-          <label for="model-select-1" class="debug-label">Choose a model:</label>
-          <select id="model-select-1" name="model" class="debug-select">
-              <option value="bart-mnli">BART-MNLI</option>
-              <option value="ada-002">ADA-002</option>
-              <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
-              <option value="flan-ul2">Flan-UL2</option>
-              <option value="llama-2">LLAMA-2</option>
-              <option value="gpt-4">GPT-4</option>
-          </select>
-          <div class="model-name" id="model-name-2"></div>
-          <div class="chatbox"></div>  
-        </div>
-
-
-        
+    <div class="arena">
+      <!-- Left Model Column -->
+      <div class="model-col">
+        <label for="model-select-1" class="debug-label">Choose a model:</label>
+        <select id="model-select-1" class="debug-select">
+          <option value="bart-mnli">BART-MNLI</option>
+          <option value="ada-002">ADA-002</option>
+          <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+          <option value="flan-ul2">Flan-UL2</option>
+          <option value="llama-2">LLAMA-2</option>
+          <option value="gpt-4">GPT-4</option>
+        </select>
+        <div id="model-name-1" class="model-name">Model: (waiting...)</div>
+        <div class="chatbox"></div>
       </div>
 
-        <div id="buttons" class="buttons">
-          <button id="evaluate" class="submit" type="button">Evaluate</button>
-          <button id="vote-model-1" class="vote" type="button">Vote Model 1</button>
-          <button id="vote-model-2" class="vote" type="button">Vote Model 2</button>
-          <button id="debug-toggle" class="submit" type="button">Toggle Debug</button>
-        </div>
-        
-  </div>
-  
-    <!-- <h1>Leaderboard</h1>
-    <div class="leaderboard-box">
-        <div class="leaderboard-entry">1. BART-MNLI</div>
-        <div class="leaderboard-entry">2. ADA-002</div>
-        <div class="leaderboard-entry">3. All-MPNet Base-v2</div>
-        <div class="leaderboard-entry">4. Flan-UL2</div>
-        <div class="leaderboard-entry">5. LLAMA-2</div>
-        <div class="leaderboard-entry">6. GPT-4</div>
-      </div> -->
+      <!-- Right Model Column -->
+      <div class="model-col">
+        <label for="model-select-2" class="debug-label">Choose a model:</label>
+        <select id="model-select-2" class="debug-select">
+          <option value="bart-mnli">BART-MNLI</option>
+          <option value="ada-002">ADA-002</option>
+          <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+          <option value="flan-ul2">Flan-UL2</option>
+          <option value="llama-2">LLAMA-2</option>
+          <option value="gpt-4">GPT-4</option>
+        </select>
+        <div id="model-name-2" class="model-name">Model: (waiting...)</div>
+        <div class="chatbox"></div>
+      </div>
+    </div>
+
+    <div id="buttons" class="buttons">
+      <button id="evaluate" class="submit" type="button">Evaluate</button>
+      <button id="vote-model-1" class="vote" type="button">Vote Model 1</button>
+      <button id="vote-model-2" class="vote" type="button">Vote Model 2</button>
+      <button id="debug-toggle" class="submit" type="button">Toggle Debug</button>
+    </div>
 
     <h1>Leaderboard</h1>
     <div class="leaderboard-box" id="leaderboard-box">
-      <!-- Leaderboard entries will be populated here -->
+      <!-- Filled dynamically -->
     </div>
-
+  </div>
 </body>
 </html>
