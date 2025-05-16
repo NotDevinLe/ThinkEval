@@ -27,17 +27,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Read a specific document
-// const ref = doc(db, "ModelPerformance", "ada-002");
-// const snap = await getDoc(ref);
-
-// if (snap.exists()) {
-//   console.log("Model Data:", snap.data());
-//   document.body.innerHTML += `<p>${JSON.stringify(snap.data())}</p>`;
-// } else {
-//   console.log("No such document!");
-// }
-
 const evaluateBtn = document.getElementById("evaluate");
 
 evaluateBtn.addEventListener("click", function() {
@@ -91,7 +80,15 @@ async function evaluate(model) {
         });
 
         const data = await res.json();
+
+        if (!data.choices || !data.choices[0]) {
+            console.error("OpenAI API error or bad response:", data);
+            document.body.innerHTML += `<p style="color: red;">Model '${model}' failed to respond correctly. Check console for details.</p>`;
+            return;
+        }
+
         const output = data.choices[0].message.content.trim();
+
         const group = output.split(" ");
 
         const correct_guesses = [0, 0, 0, 0];
@@ -155,35 +152,6 @@ vote2Btn.addEventListener("click", async () => {
     console.log("Voted for:", model2);
 });
 
-// async function updateLeaderboard() {
-//   const votesRef = collection(db, "Votes");
-//   const snapshot = await getDocs(votesRef); 
-//   const voteCounts = {};
-
-//   snapshot.forEach(doc => {
-//     const model = doc.data().votedFor;
-//     if (voteCounts[model]) {
-//       voteCounts[model]++;
-//     } else {
-//       voteCounts[model] = 1;
-//     }
-//   });
-
-//   const sortedModels = Object.entries(voteCounts)
-//     .sort((a, b) => b[1] - a[1]);
-
-//   const leaderboardBox = document.getElementById("leaderboard-box");
-//   leaderboardBox.innerHTML = "";
-
-//   sortedModels.forEach(([model, count], index) => {
-//     const entry = document.createElement("div");
-//     entry.className = "leaderboard-entry";
-//     entry.textContent = `${index + 1}. ${model} (${count} votes)`;
-//     leaderboardBox.appendChild(entry);
-//   });
-// }
-
-
 // update leader board
 
 const allModels = [
@@ -192,7 +160,7 @@ const allModels = [
   "all-mpnet-base-v2",
   "flan-ul2",
   "llama-2",
-  "gpt-4"
+  "gpt-3.5-turbo"
 ];
 
 onSnapshot(collection(db, "Votes"), (snapshot) => {
