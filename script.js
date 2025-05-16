@@ -1,14 +1,16 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
+  getFirestore,
+  doc,
+  getDoc,
   collection,
+  addDoc,
   getDocs,
-  query,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-
 
 
 // Setting up the database
@@ -120,6 +122,7 @@ async function evaluate(model) {
         }
     }
 }
+}
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -127,7 +130,6 @@ function shuffle(array) {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-    }
 }
 
 const vote1Btn = document.getElementById("vote-model-1");
@@ -184,14 +186,30 @@ vote2Btn.addEventListener("click", async () => {
 
 // update leader board
 
+const allModels = [
+  "bart-mnli",
+  "ada-002",
+  "all-mpnet-base-v2",
+  "flan-ul2",
+  "llama-2",
+  "gpt-4"
+];
+
 onSnapshot(collection(db, "Votes"), (snapshot) => {
   const voteCounts = {};
+
+  // Initialize counts to 0 for all models
+  allModels.forEach(model => {
+    voteCounts[model] = 0;
+  });
+
   snapshot.forEach(doc => {
     const model = doc.data().votedFor;
     voteCounts[model] = (voteCounts[model] || 0) + 1;
   });
 
-  const sortedModels = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
+  const sortedModels = Object.entries(voteCounts)
+    .sort((a, b) => b[1] - a[1]);
 
   const leaderboardBox = document.getElementById("leaderboard-box");
   leaderboardBox.innerHTML = "";
