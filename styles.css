@@ -100,16 +100,19 @@ body {
   }
   
   .chat-message {
-  margin-bottom: 12px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  max-width: 100%;
-  clear: both;
-  word-wrap: break-word;        /* Force word breaks */
-  overflow-wrap: break-word;    /* Same as above, newer */
-  white-space: pre-wrap;        /* Keep line breaks + wrap lines */
-  box-sizing: border-box;       /* Include padding in width */
-  display: block;               /* Ensure block layout */
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    max-width: 100%;
+    clear: both;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+    display: block;
+
+    /* ✅ New important fix for long JSON-like strings */
+    word-break: break-all;
   }
 
   
