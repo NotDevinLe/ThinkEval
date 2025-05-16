@@ -88,18 +88,6 @@ body {
   }
 
   .chatbox {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    width: 100%;
-    height: 400px;
-    overflow-y: auto;
-    background-color: #f9f9f9;
-    margin-top: 20px;
-    font-family: sans-serif;
-  }
-  
-  .chatbox {
   width: 100%;
   height: 300px;
   margin-top: 1rem;
@@ -109,6 +97,18 @@ body {
   overflow-y: auto;
   padding: 10px;  /* Add padding for space */
   box-sizing: border-box;  /* To include padding in width */
+  }
+  
+  .chat-message {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  max-width: 100%;
+  clear: both;
+  word-wrap: break-word;       /* Break long words */
+  overflow-wrap: break-word;    /* Also handle wrapping */
+  white-space: pre-wrap;        /* Preserve newlines + wrap long lines */
+  box-sizing: border-box;       /* Respect padding in width */
   }
 
   
