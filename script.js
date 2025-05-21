@@ -54,14 +54,8 @@ evaluateBtn.addEventListener("click", () => {
 
   console.log(`Evaluating ${model1} (left) vs ${model2} (right)`);
 
-  evaluate(model1, "left", () => {
+  evaluate(model1, model2, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
-    vote1Btn.disabled = false;
-  });
-
-  evaluate(model2, "right", () => {
-    modelName2.textContent = `Model: ${model2}`;
-    vote2Btn.disabled = false;
   });
 });
 
@@ -87,7 +81,7 @@ vote2Btn.addEventListener("click", async () => {
   console.log("Voted for:", model2);
 });
 
-async function evaluate(model, side, onComplete) {
+async function evaluate(model1, model2, side, onComplete) {
   const response = await fetch("games.json");
   const data = await response.json();
 
@@ -95,6 +89,9 @@ async function evaluate(model, side, onComplete) {
   let randomized = [];
   for (const category in game) randomized.push(...game[category]);
   randomized = shuffle(randomized);
+
+  const puzzle = document.getElementsByClassName("puzzle")
+  puzzle.innerHTML = game
 
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
   + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
