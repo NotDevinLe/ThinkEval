@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-// Firebase Config
+// The setup
 const firebaseConfig = {
   apiKey: "AIzaSyBwGgvtyEzA_SvpFnTf867yP1WTZReDcdI",
   authDomain: "thinkeval.firebaseapp.com",
@@ -15,6 +15,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
+// Accessing the DOM
 const allModels = ["bart-mnli", "ada-002", "all-mpnet-base-v2", "flan-ul2", "llama-2", "gpt-4"];
 
 const evaluateBtn = document.getElementById("evaluate");
@@ -29,14 +31,12 @@ debugToggleBtn.addEventListener("click", () => {
   document.body.classList.toggle("debug-visible");
 });
 
-evaluateBtn.addEventListener("click", () => {
+// Evaluate here
+evaluateBtn.addEventListener("click", async () => {
   const debugVisible = document.body.classList.contains("debug-visible");
 
-  // Reset model names and disable votes
   modelName1.textContent = "Model: (waiting...)";
   modelName2.textContent = "Model: (waiting...)";
-  vote1Btn.disabled = true;
-  vote2Btn.disabled = true;
 
   let model1, model2;
   if (debugVisible) {
@@ -47,18 +47,32 @@ evaluateBtn.addEventListener("click", () => {
     model1 = randomized[0];
     model2 = randomized.find(m => m !== model1);
 
-    // Update selects for debugging visibility (even if hidden)
     document.getElementById("model-select-1").value = model1;
     document.getElementById("model-select-2").value = model2;
   }
 
   console.log(`Evaluating ${model1} (left) vs ${model2} (right)`);
+  const response = await fetch("games.json");
+  const data = await response.json();
 
-  evaluate(model1, model2, "left", () => {
+  const game = data[Math.floor(Math.random() * data.length)];
+  let randomized = [];
+  for (const category in game) randomized.push(...game[category]);
+  randomized = shuffle(randomized);
+
+  const puzzle = document.getElementById("puzzle");
+  puzzle.innerHTML = JSON.stringify(randomized);
+
+  evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
-  });
+  }, randomized);
+
+  evaluate(model2, "right", () => {
+    modelName1.textContent = `Model: ${model2}`;
+  }, randomized);
 });
 
+// Vote Here
 vote1Btn.addEventListener("click", async () => {
   const model1 = document.getElementById("model-select-1").value;
   if (modelName1.textContent.includes("(waiting...)")) return;
@@ -81,18 +95,7 @@ vote2Btn.addEventListener("click", async () => {
   console.log("Voted for:", model2);
 });
 
-async function evaluate(model1, model2, side, onComplete) {
-  const response = await fetch("games.json");
-  const data = await response.json();
-
-  const game = data[Math.floor(Math.random() * data.length)];
-  let randomized = [];
-  for (const category in game) randomized.push(...game[category]);
-  randomized = shuffle(randomized);
-
-  const puzzle = document.getElementsByClassName("puzzle")
-  puzzle.innerHTML = JSON.stringify(randomized)
-
+async function evaluate(model, side, onComplete, randomized) {
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
   + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
   `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
@@ -146,7 +149,6 @@ async function evaluate(model1, model2, side, onComplete) {
     }
   }
 
-  // After done typing, trigger completion callback
   onComplete();
 }
 
@@ -182,6 +184,7 @@ async function displayMessage(output, side) {
   });
 }
 
+// Updating the leaderboard
 onSnapshot(collection(db, "Votes"), (snapshot) => {
   const voteCounts = {};
   allModels.forEach(model => { voteCounts[model] = 0; });
