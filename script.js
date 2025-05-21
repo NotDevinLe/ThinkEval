@@ -91,7 +91,7 @@ async function evaluate(model1, model2, side, onComplete) {
   randomized = shuffle(randomized);
 
   const puzzle = document.getElementsByClassName("puzzle")
-  puzzle.innerHTML = game
+  puzzle.innerHTML = JSON.stringify(randomized)
 
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
   + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
@@ -100,6 +100,7 @@ async function evaluate(model1, model2, side, onComplete) {
 
   let score = 0;
   for (let i = 0; i < 4; i++) {
+    console.log(randomized)
     const res = await fetch("https://hf-backend-dusky.vercel.app/api/inference", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -128,10 +129,20 @@ async function evaluate(model1, model2, side, onComplete) {
     const highest = Math.max(...correct_guesses);
     if (highest === 4) {
       randomized = randomized.filter(word => !group.includes(word));
-      input = `You got a group correct! Find the next grouping for ${JSON.stringify(randomized)}.`;
+      for (const word of group) {
+        const index = randomized.indexOf(word);
+        if (index !== -1) randomized.splice(index, 1);  
+      }
+      input = `You got a group correct!`
+        + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
+        `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
+        `\"Word1 Word2 Word3 Word4\" where you wouldn't include the quotation marks in the response.`;
       score++;
     } else {
-      input = `You are ${4 - highest} word(s) away from a correct grouping. Repeat the process with ${JSON.stringify(randomized)}.`;
+      input = `You are ${4 - highest} word(s) away from a correct grouping.`
+      + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
+      `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
+      `\"Word1 Word2 Word3 Word4\" where you wouldn't include the quotation marks in the response.`;
     }
   }
 
