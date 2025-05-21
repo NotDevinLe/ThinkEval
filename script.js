@@ -65,11 +65,11 @@ evaluateBtn.addEventListener("click", async () => {
 
   evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
-  }, randomized);
+  }, game, randomized);
 
   evaluate(model2, "right", () => {
     modelName1.textContent = `Model: ${model2}`;
-  }, randomized);
+  }, game, randomized);
 });
 
 // Vote Here
@@ -95,7 +95,7 @@ vote2Btn.addEventListener("click", async () => {
   console.log("Voted for:", model2);
 });
 
-async function evaluate(model, side, onComplete, randomized) {
+async function evaluate(model, side, onComplete, game, randomized) {
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
   + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
   `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
