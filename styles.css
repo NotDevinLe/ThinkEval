@@ -164,3 +164,7 @@ button:disabled {
 .debug-visible .debug-select {
   display: block;
 }
+
+.chat-message.model.correct {
+  background-color: #4CAF50;
+}

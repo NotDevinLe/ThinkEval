@@ -117,7 +117,6 @@ async function evaluate(model, side, onComplete, game, randomized) {
     }
 
     const output = apiData.choices[0].message.content.trim();
-    await displayMessage(output, side);
 
     const group = output.split(" ");
     const correct_guesses = [0, 0, 0, 0];
@@ -141,11 +140,13 @@ async function evaluate(model, side, onComplete, game, randomized) {
         `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
         `\"Word1 Word2 Word3 Word4\" where you wouldn't include the quotation marks in the response.`;
       score++;
+      await displayMessage(output, side, true);
     } else {
       input = `You are ${4 - highest} word(s) away from a correct grouping.`
       + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
       `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
       `\"Word1 Word2 Word3 Word4\" where you wouldn't include the quotation marks in the response.`;
+      await displayMessage(output, side, false);
     }
   }
 
@@ -160,12 +161,17 @@ function shuffle(array) {
   return array;
 }
 
-async function displayMessage(output, side) {
+async function displayMessage(output, side, correct) {
   const chatboxSelector = side === "left" ? ".model-col:nth-child(1) .chatbox" : ".model-col:nth-child(2) .chatbox";
   const chatbox = document.querySelector(chatboxSelector);
 
   const messageDiv = document.createElement("div");
   messageDiv.className = "chat-message model";
+  
+  if (correct) {
+    messageDiv.classList.add("correct");
+  }
+
   chatbox.appendChild(messageDiv);
 
   let index = 0;
