@@ -74,25 +74,36 @@ evaluateBtn.addEventListener("click", async () => {
 
 // Vote Here
 
-vote1Btn.addEventListener("click", async () => {
+vote2Btn.addEventListener("click", async () => {
     const model1 = document.getElementById("model-select-1").value;
+    const model2 = document.getElementById("model-select-1").value;
     if (modelName1.textContent.includes("(waiting...)")) return;
   
-    const modelRef = doc(db, "ModelPerformance", model1);
-    const modelSnap = await getDoc(modelRef);
+    const model1Ref = doc(db, "ModelPerformance", model1);
+    const model1Snap = await getDoc(model1Ref);
+    const model2Ref = doc(db, "ModelPerformance", model2);
+    const model2Snap = await getDoc(model2Ref);
   
-    let currentElo = 1000;
+    let currentElo2 = 1000;
   
-    if (modelSnap.exists()) {
-      currentElo = modelSnap.data().elo || 1000;
+    if (model2Snap.exists()) {
+      currentElo = model2Snap.data().elo || 1000;
     } else {
-      await setDoc(modelRef, { elo: currentElo });
-      console.log(`Model ${model1} added to database with ELO ${currentElo}`);
+      await setDoc(model2Ref, { elo: currentElo2 });
+      console.log(`Model ${model2} added to database with ELO ${currentElo2}`);
     }
+
+    let currentElo1 = 1000;
+    if (model1Snap.exists()) {
+        currentElo1 = model1Snap.data().elo || 1000;
+      } else {
+        await setDoc(model1Ref, { elo: currentElo1 });
+        console.log(`Model ${model1} added to database with ELO ${currentElo1}`);
+      }
   
-    const updatedElo = currentElo + 10;
+    const updatedElo = currentElo1 + 50 * currentElo2 / currentElo1;
   
-    await updateDoc(modelRef, {
+    await updateDoc(model1Ref, {
       elo: updatedElo
     });
   
@@ -101,24 +112,35 @@ vote1Btn.addEventListener("click", async () => {
 
 
   vote2Btn.addEventListener("click", async () => {
+    const model1 = document.getElementById("model-select-1").value;
     const model2 = document.getElementById("model-select-1").value;
     if (modelName2.textContent.includes("(waiting...)")) return;
   
-    const modelRef = doc(db, "ModelPerformance", model2);
-    const modelSnap = await getDoc(modelRef);
+    const model1Ref = doc(db, "ModelPerformance", model1);
+    const model1Snap = await getDoc(model1Ref);
+    const model2Ref = doc(db, "ModelPerformance", model2);
+    const model2Snap = await getDoc(model2Ref);
   
-    let currentElo = 1000;
+    let currentElo2 = 1000;
   
-    if (modelSnap.exists()) {
-      currentElo = modelSnap.data().elo || 1000;
+    if (model2Snap.exists()) {
+      currentElo = model2Snap.data().elo || 1000;
     } else {
-      await setDoc(modelRef, { elo: currentElo });
-      console.log(`Model ${model2} added to database with ELO ${currentElo}`);
+      await setDoc(model2Ref, { elo: currentElo2 });
+      console.log(`Model ${model2} added to database with ELO ${currentElo2}`);
     }
+
+    let currentElo1 = 1000;
+    if (model1Snap.exists()) {
+        currentElo1 = model1Snap.data().elo || 1000;
+      } else {
+        await setDoc(model1Ref, { elo: currentElo1 });
+        console.log(`Model ${model1} added to database with ELO ${currentElo1}`);
+      }
   
-    const updatedElo = currentElo + 10;
+    const updatedElo = currentElo2 + 50 * currentElo1 / currentElo2;
   
-    await updateDoc(modelRef, {
+    await updateDoc(model2Ref, {
       elo: updatedElo
     });
   
