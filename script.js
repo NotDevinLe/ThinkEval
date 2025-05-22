@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 // The setup
 const firebaseConfig = {
@@ -81,12 +81,11 @@ vote1Btn.addEventListener("click", async () => {
     const modelRef = doc(db, "ModelPerformance", model1);
     const modelSnap = await getDoc(modelRef);
   
-    let currentElo = 1000; // default starting ELO
+    let currentElo = 1000;
   
     if (modelSnap.exists()) {
       currentElo = modelSnap.data().elo || 1000;
     } else {
-      // Add model with initial ELO
       await setDoc(modelRef, { elo: currentElo });
       console.log(`Model ${model1} added to database with ELO ${currentElo}`);
     }
@@ -108,12 +107,11 @@ vote1Btn.addEventListener("click", async () => {
     const modelRef = doc(db, "ModelPerformance", model2);
     const modelSnap = await getDoc(modelRef);
   
-    let currentElo = 1000; // default starting ELO
+    let currentElo = 1000;
   
     if (modelSnap.exists()) {
       currentElo = modelSnap.data().elo || 1000;
     } else {
-      // Add model with initial ELO
       await setDoc(modelRef, { elo: currentElo });
       console.log(`Model ${model2} added to database with ELO ${currentElo}`);
     }
