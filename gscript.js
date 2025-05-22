@@ -26,7 +26,8 @@ send.addEventListener("click", async () => {
     if (selected.length == 4) {
         let highest = 0
         const selectedWords = selected.map(tile => tile.textContent);
-        for (const category of game) {
+        const message = document.getElementById("message")
+        for (const category in game) {
             let currGroupings = 0
             for (const word of game[category]) {
                 if (selectedWords.includes(word)) {
@@ -41,10 +42,10 @@ send.addEventListener("click", async () => {
                     tile.classList.add("correct");
                   });
                   selected = []
+                  message.textContent = "You got a grouping correct!"
                   return
             }
         }
-        const message = document.getElementById("message")
         message.textContent = `You were ${4 - highest} word(s) away.`
 
 
