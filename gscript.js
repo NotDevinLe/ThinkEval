@@ -42,11 +42,10 @@ send.addEventListener("click", async () => {
                   });
                   selected = []
                   return
-            } else {
-                const message = document.getElementById("message")
-                message.textContent = `You were ${4 - highest} word(s) away.`
             }
         }
+        const message = document.getElementById("message")
+        message.textContent = `You were ${4 - highest} word(s) away.`
 
 
     }
