@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 // The setup
 const firebaseConfig = {
@@ -85,15 +85,25 @@ vote1Btn.addEventListener("click", async () => {
 });
 
 vote2Btn.addEventListener("click", async () => {
-  const model2 = document.getElementById("model-select-2").value;
-  if (modelName2.textContent.includes("(waiting...)")) return;
-  await addDoc(collection(db, "Votes"), {
-    votedFor: model2,
-    modelPosition: "right",
-    timestamp: Date.now()
+    const model2 = document.getElementById("model-select-2").value;
+    if (modelName2.textContent.includes("(waiting...)")) return;
+  
+    const modelRef = doc(db, "ModelPerformance", model2);
+    const modelSnap = await getDoc(modelRef);
+  
+    if (modelSnap.exists()) {
+      const currentElo = modelSnap.data().elo || 1000;
+      const updatedElo = currentElo + 10;
+  
+      await updateDoc(modelRef, {
+        elo: updatedElo
+      });
+  
+      console.log(`Updated ELO for ${model2} to ${updatedElo}`);
+    } else {
+      console.error("Model not found:", model2);
+    }
   });
-  console.log("Voted for:", model2);
-});
 
 async function evaluate(model, side, onComplete, game, randomized) {
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
@@ -191,23 +201,26 @@ async function displayMessage(output, side, correct) {
 }
 
 // Updating the leaderboard
-onSnapshot(collection(db, "Votes"), (snapshot) => {
-  const voteCounts = {};
-  allModels.forEach(model => { voteCounts[model] = 0; });
-
-  snapshot.forEach(doc => {
-    const model = doc.data().votedFor;
-    voteCounts[model] = (voteCounts[model] || 0) + 1;
+onSnapshot(collection(db, "ModelPerformance"), (snapshot) => {
+    const models = [];
+  
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      models.push({
+        name: doc.id,
+        elo: data.elo || 1000
+      });
+    });
+  
+    models.sort((a, b) => b.elo - a.elo);
+  
+    const leaderboardBox = document.getElementById("leaderboard-box");
+    leaderboardBox.innerHTML = "";
+  
+    models.forEach((model, index) => {
+      const entry = document.createElement("div");
+      entry.className = "leaderboard-entry";
+      entry.textContent = `${index + 1}. ${model.name} (ELO: ${model.elo})`;
+      leaderboardBox.appendChild(entry);
+    });
   });
-
-  const sortedModels = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
-  const leaderboardBox = document.getElementById("leaderboard-box");
-  leaderboardBox.innerHTML = "";
-
-  sortedModels.forEach(([model, count], index) => {
-    const entry = document.createElement("div");
-    entry.className = "leaderboard-entry";
-    entry.textContent = `${index + 1}. ${model} (${count} votes)`;
-    leaderboardBox.appendChild(entry);
-  });
-});
