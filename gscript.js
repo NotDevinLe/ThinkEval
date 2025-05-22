@@ -5,7 +5,7 @@ const send = document.getElementById("send")
 const allModels = ["bart-mnli", "ada-002", "all-mpnet-base-v2", "flan-ul2", "llama-2", "gpt-4"];
 
 let numSelected = 0
-const selected = []
+let selected = []
 let game = []
 
 generate.addEventListener("click", async () => {
