@@ -24,19 +24,31 @@ generate.addEventListener("click", async () => {
 
 send.addEventListener("click", async () => {
     if (selected.length == 4) {
+        let highest = 0
         const selectedWords = selected.map(tile => tile.textContent);
         for (const category in game) {
-            const match = game[category].every(word => selectedWords.includes(word))
+            let currGroupings = 0
+            for (const word in game[category]) {
+                if (selectedWords.includes(word)) {
+                    currGroupings++;
+                }
+            }
+            highest = Math.max(highest, currGroupings)
 
-            if (match) {
+            if (currGroupings == 4) {
                 selected.forEach(tile => {
                     tile.classList.remove("selected");
                     tile.classList.add("correct");
                   });
                   selected = []
                   return
+            } else {
+                const message = document.getElementById("message")
+                message.textContent = `You were ${4 - highest} word(s) away.`
             }
         }
+
+
     }
 })
 
