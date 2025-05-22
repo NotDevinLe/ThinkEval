@@ -74,78 +74,83 @@ evaluateBtn.addEventListener("click", async () => {
 
 // Vote Here
 
-vote2Btn.addEventListener("click", async () => {
-    const model1 = document.getElementById("model-select-1").value;
-    const model2 = document.getElementById("model-select-1").value;
+vote1Btn.addEventListener("click", async () => {
+    const model1 = document.getElementById("model-select-1").value; // winner
+    const model2 = document.getElementById("model-select-2").value; // loser
+  
     if (modelName1.textContent.includes("(waiting...)")) return;
   
     const model1Ref = doc(db, "ModelPerformance", model1);
-    const model1Snap = await getDoc(model1Ref);
     const model2Ref = doc(db, "ModelPerformance", model2);
+  
+    const model1Snap = await getDoc(model1Ref);
     const model2Snap = await getDoc(model2Ref);
   
-    let currentElo2 = 1000;
+    let elo1 = model1Snap.exists() ? model1Snap.data().elo || 1000 : 1000;
+    let elo2 = model2Snap.exists() ? model2Snap.data().elo || 1000 : 1000;
   
-    if (model2Snap.exists()) {
-      currentElo = model2Snap.data().elo || 1000;
-    } else {
-      await setDoc(model2Ref, { elo: currentElo2 });
-      console.log(`Model ${model2} added to database with ELO ${currentElo2}`);
+    if (!model1Snap.exists()) {
+      await setDoc(model1Ref, { elo: elo1 });
+      console.log(`Model ${model1} added with default ELO ${elo1}`);
     }
-
-    let currentElo1 = 1000;
-    if (model1Snap.exists()) {
-        currentElo1 = model1Snap.data().elo || 1000;
-      } else {
-        await setDoc(model1Ref, { elo: currentElo1 });
-        console.log(`Model ${model1} added to database with ELO ${currentElo1}`);
-      }
   
-    const updatedElo = currentElo1 + 50 * currentElo2 / currentElo1;
+    if (!model2Snap.exists()) {
+      await setDoc(model2Ref, { elo: elo2 });
+      console.log(`Model ${model2} added with default ELO ${elo2}`);
+    }
   
-    await updateDoc(model1Ref, {
-      elo: updatedElo
-    });
+    const k = 32;
+    const expected1 = 1 / (1 + Math.pow(10, (elo2 - elo1) / 400));
+    const expected2 = 1 - expected1;
   
-    console.log(`Updated ELO for ${model1} to ${updatedElo}`);
+    const newElo1 = Math.round(elo1 + k * (1 - expected1));
+    const newElo2 = Math.round(elo2 + k * (0 - expected2));
+  
+    await updateDoc(model1Ref, { elo: newElo1 });
+    await updateDoc(model2Ref, { elo: newElo2 });
+  
+    console.log(`Updated ELO: ${model1} → ${newElo1}, ${model2} → ${newElo2}`);
   });
 
 
   vote2Btn.addEventListener("click", async () => {
-    const model1 = document.getElementById("model-select-1").value;
-    const model2 = document.getElementById("model-select-1").value;
+    const model1 = document.getElementById("model-select-1").value; // loser
+    const model2 = document.getElementById("model-select-2").value; // winner
+  
     if (modelName2.textContent.includes("(waiting...)")) return;
   
     const model1Ref = doc(db, "ModelPerformance", model1);
-    const model1Snap = await getDoc(model1Ref);
     const model2Ref = doc(db, "ModelPerformance", model2);
+  
+    const model1Snap = await getDoc(model1Ref);
     const model2Snap = await getDoc(model2Ref);
   
-    let currentElo2 = 1000;
+    let elo1 = model1Snap.exists() ? model1Snap.data().elo || 1000 : 1000;
+    let elo2 = model2Snap.exists() ? model2Snap.data().elo || 1000 : 1000;
   
-    if (model2Snap.exists()) {
-      currentElo = model2Snap.data().elo || 1000;
-    } else {
-      await setDoc(model2Ref, { elo: currentElo2 });
-      console.log(`Model ${model2} added to database with ELO ${currentElo2}`);
+    if (!model1Snap.exists()) {
+      await setDoc(model1Ref, { elo: elo1 });
+      console.log(`Model ${model1} added with default ELO ${elo1}`);
     }
-
-    let currentElo1 = 1000;
-    if (model1Snap.exists()) {
-        currentElo1 = model1Snap.data().elo || 1000;
-      } else {
-        await setDoc(model1Ref, { elo: currentElo1 });
-        console.log(`Model ${model1} added to database with ELO ${currentElo1}`);
-      }
   
-    const updatedElo = currentElo2 + 50 * currentElo1 / currentElo2;
+    if (!model2Snap.exists()) {
+      await setDoc(model2Ref, { elo: elo2 });
+      console.log(`Model ${model2} added with default ELO ${elo2}`);
+    }
   
-    await updateDoc(model2Ref, {
-      elo: updatedElo
-    });
+    const k = 32;
+    const expected2 = 1 / (1 + Math.pow(10, (elo1 - elo2) / 400));
+    const expected1 = 1 - expected2;
   
-    console.log(`Updated ELO for ${model2} to ${updatedElo}`);
+    const newElo2 = Math.round(elo2 + k * (1 - expected2)); // model 2 wins
+    const newElo1 = Math.round(elo1 + k * (0 - expected1)); // model 1 loses
+  
+    await updateDoc(model1Ref, { elo: newElo1 });
+    await updateDoc(model2Ref, { elo: newElo2 });
+  
+    console.log(`Updated ELO: ${model2} → ${newElo2}, ${model1} → ${newElo1}`);
   });
+  
 
 async function evaluate(model, side, onComplete, game, randomized) {
   let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
