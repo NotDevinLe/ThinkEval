@@ -236,3 +236,13 @@ button:disabled {
   color: #003366;
 }
 
+.word-tile.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724; 
+  font-weight: bold;
+  cursor: default;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
+}
+
