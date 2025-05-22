@@ -26,9 +26,9 @@ send.addEventListener("click", async () => {
     if (selected.length == 4) {
         let highest = 0
         const selectedWords = selected.map(tile => tile.textContent);
-        for (const category in game) {
+        for (const category of game) {
             let currGroupings = 0
-            for (const word in game[category]) {
+            for (const word of game[category]) {
                 if (selectedWords.includes(word)) {
                     currGroupings++;
                 }
