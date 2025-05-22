@@ -22,9 +22,9 @@ function loadGame(game) {
     for (const category in game) randomized.push(...game[category]);
     randomized = shuffle(randomized);
 
-    for (const word in randomized) {
+    for (const word of randomized) {
         const tile = document.createElement("div")
-        tile.className = 'word-tile'
+        tile.className = 'word-tile-game'
         tile.textContent = word
         tile.onclick = () => {
             toggleSelection()

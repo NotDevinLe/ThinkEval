@@ -202,3 +202,37 @@ button:disabled {
 .word-tile.grouped {
   background-color: #e0f2fe;
 }
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.word-tile-game {
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.word-tile-game:hover {
+  background-color: #e6f0ff;
+  border-color: #339af0;
+}
+
+.word-tile-game.selected {
+  background-color: #cce5ff;
+  border-color: #339af0;
+  color: #003366;
+}
+
