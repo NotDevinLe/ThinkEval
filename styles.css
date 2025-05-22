@@ -236,7 +236,7 @@ button:disabled {
   color: #003366;
 }
 
-.word-tile.correct {
+.word-tile-game.correct {
   background-color: #d4edda;
   border-color: #28a745;
   color: #155724; 

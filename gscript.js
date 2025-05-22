@@ -34,6 +34,7 @@ send.addEventListener("click", async () => {
                     tile.classList.remove("selected");
                     tile.classList.add("correct");
                   });
+                  numSelected = 0
             }
         }
     }
