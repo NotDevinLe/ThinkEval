@@ -83,6 +83,13 @@ evaluateBtn.addEventListener("click", async () => {
     puzzle.appendChild(groupBox);
   }
 
+  const chatboxes = document.getElementsByClassName("chatbox");
+
+  for (const chatbox of chatboxes) {
+    chatbox.innerHTML = "";
+  }
+
+
   evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
   }, game, randomized);
