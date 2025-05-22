@@ -68,7 +68,7 @@ evaluateBtn.addEventListener("click", async () => {
   }, game, randomized);
 
   evaluate(model2, "right", () => {
-    modelName1.textContent = `Model: ${model2}`;
+    modelName2.textContent = `Model: ${model2}`;
   }, game, randomized);
 });
 
