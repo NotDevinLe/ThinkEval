@@ -96,7 +96,10 @@ async function evaluate(model, side, onComplete) {
   for (const category in game) randomized.push(...game[category]);
   randomized = shuffle(randomized);
 
-  let input = `Given ${JSON.stringify(randomized)}, can you find a way to make 4 groups of 4 words based on their category? Only return the final answer with the four words with whitespace between them.`;
+  let input = `You are playing a game in which you're given a set of words and it is possible to categorize each into groups of four.` 
+  + `Given the set of words; ${JSON.stringify(randomized)}, find the groups of 4 words from here that will correspond to a category.` + 
+  `Only output one of the groups since we're only allowed to check one group at a time. Write your final output in the following output:` + 
+  `\"Word1 Word2 Word3 Word4\" where you wouldn't include the quotation marks in the response.`;
 
   let score = 0;
   for (let i = 0; i < 4; i++) {
