@@ -4,11 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="gscript.js" defer></script>
 </head>
 <body>
     <nav style="background-color: #333; padding: 10px;">
         <a href="index.html" style="color: white; text-decoration: none; margin-right: 15px;">Home</a>
         <a href="generate.html" style="color: white; text-decoration: none;">Generator</a>
       </nav>
+      <div class="evaluate-container">
+        <h1>Evaluate a Model:</h1>
+        <p>
+          Instructions: We have 700 unique puzzles for this model to be tested on.
+          Choose your model and watch as it tries to reason and solve below.
+        </p>
+    
+        <div id="puzzle">
+    
+        </div>
+    
+        <div class="model-col">
+        <label for="model-select-1" class="debug-label">Choose a model:</label>
+        <select id="model-select-1" name="model" class="debug-select">
+            <option value="bart-mnli">BART-MNLI</option>
+            <option value="ada-002">ADA-002</option>
+            <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+            <option value="flan-ul2">Flan-UL2</option>
+            <option value="llama-2">LLAMA-2</option>
+            <option value="gpt-4">GPT-4</option>
+        </select>
+        <div id="model-name-1" class="model-name">Model: (waiting...)</div>
+        <div class="chatbox"></div>
+    
+        <div id="buttons" class="buttons">
+          <button id="evaluate" class="submit" type="button">Evaluate</button>
+          <button id="vote-model-1" class="vote" type="button">Good</button>
+          <button id="vote-model-2" class="vote" type="button">Bad</button>
+          <button id="debug-toggle" class="submit" type="button">Toggle Debug</button>
+        </div>
+    
+        <h1>Leaderboard</h1>
+        <div class="leaderboard-box" id="leaderboard-box"></div>
+      </div>
 </body>
 </html>
