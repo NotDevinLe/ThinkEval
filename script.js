@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 
-// Accessing the DOM
+
 const allModels = ["bart-mnli", "ada-002", "all-mpnet-base-v2", "flan-ul2", "llama-2", "gpt-4"];
 
 const evaluateBtn = document.getElementById("evaluate");
@@ -31,7 +31,7 @@ debugToggleBtn.addEventListener("click", () => {
   document.body.classList.toggle("debug-visible");
 });
 
-// Evaluate here
+
 evaluateBtn.addEventListener("click", async () => {
   const debugVisible = document.body.classList.contains("debug-visible");
 
@@ -61,7 +61,7 @@ evaluateBtn.addEventListener("click", async () => {
   randomized = shuffle(randomized);
 
   const puzzle = document.getElementById("puzzle");
-  puzzle.innerHTML = JSON.stringify(randomized);
+  puzzle.innerHTML = JSON.stringify(game);
 
   evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
@@ -72,11 +72,10 @@ evaluateBtn.addEventListener("click", async () => {
   }, game, randomized);
 });
 
-// Vote Here
 
 vote1Btn.addEventListener("click", async () => {
-    const model1 = document.getElementById("model-select-1").value; // winner
-    const model2 = document.getElementById("model-select-2").value; // loser
+    const model1 = document.getElementById("model-select-1").value;
+    const model2 = document.getElementById("model-select-2").value;
   
     if (modelName1.textContent.includes("(waiting...)")) return;
   
@@ -114,8 +113,8 @@ vote1Btn.addEventListener("click", async () => {
 
 
   vote2Btn.addEventListener("click", async () => {
-    const model1 = document.getElementById("model-select-1").value; // loser
-    const model2 = document.getElementById("model-select-2").value; // winner
+    const model1 = document.getElementById("model-select-1").value;
+    const model2 = document.getElementById("model-select-2").value;
   
     if (modelName2.textContent.includes("(waiting...)")) return;
   
@@ -142,8 +141,8 @@ vote1Btn.addEventListener("click", async () => {
     const expected2 = 1 / (1 + Math.pow(10, (elo1 - elo2) / 400));
     const expected1 = 1 - expected2;
   
-    const newElo2 = Math.round(elo2 + k * (1 - expected2)); // model 2 wins
-    const newElo1 = Math.round(elo1 + k * (0 - expected1)); // model 1 loses
+    const newElo2 = Math.round(elo2 + k * (1 - expected2));
+    const newElo1 = Math.round(elo1 + k * (0 - expected1));
   
     await updateDoc(model1Ref, { elo: newElo1 });
     await updateDoc(model2Ref, { elo: newElo2 });
@@ -247,7 +246,6 @@ async function displayMessage(output, side, correct) {
   });
 }
 
-// Updating the leaderboard
 onSnapshot(collection(db, "ModelPerformance"), (snapshot) => {
     const models = [];
   
