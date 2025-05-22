@@ -27,7 +27,7 @@ function loadGame(game) {
         tile.className = 'word-tile-game'
         tile.textContent = word
         tile.onclick = () => {
-            toggleSelection()
+            toggleSelection(tile)
         }
         board.appendChild(tile)
     }
@@ -41,6 +41,6 @@ function shuffle(array) {
     return array;
   }
 
-function toggleSelection() {
-    console.log("hi")
+function toggleSelection(tile) {
+    tile.classList.toggle("selected")
 }
