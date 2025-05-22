@@ -3,6 +3,8 @@ const board = document.getElementById("board")
 
 const allModels = ["bart-mnli", "ada-002", "all-mpnet-base-v2", "flan-ul2", "llama-2", "gpt-4"];
 
+let selected = 0
+
 generate.addEventListener("click", async () => {
     const modelName = allModels[Math.floor(Math.random() * allModels.length)];
     console.log("Using Model: ", modelName);
@@ -42,5 +44,13 @@ function shuffle(array) {
   }
 
 function toggleSelection(tile) {
-    tile.classList.toggle("selected")
+    if (!tile.classList.contains("selected") && selected <= 3) {
+        tile.classList.toggle("selected")
+        selected++; 
+    }
+    else if (tile.classList.contains("selected")) {
+        tile.classList.toggle("selected")
+        selected--;
+    }
+    
 }
