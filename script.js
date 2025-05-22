@@ -61,14 +61,27 @@ evaluateBtn.addEventListener("click", async () => {
   randomized = shuffle(randomized);
 
   const puzzle = document.getElementById("puzzle");
-  puzzle.innerHTML = ""; // Clear existing content
-
-  randomized.forEach(word => {
-  const wordDiv = document.createElement("div");
-  wordDiv.className = "word-tile";
-  wordDiv.textContent = word;
-  puzzle.appendChild(wordDiv);
-});
+  puzzle.innerHTML = ""; // Clear old content
+  
+  for (const category in game) {
+    const groupBox = document.createElement("div");
+    groupBox.className = "category-group";
+  
+    const categoryLabel = document.createElement("div");
+    categoryLabel.className = "category-label";
+    categoryLabel.textContent = category;
+  
+    groupBox.appendChild(categoryLabel);
+  
+    game[category].forEach(word => {
+      const wordDiv = document.createElement("div");
+      wordDiv.className = "word-tile grouped";
+      wordDiv.textContent = word;
+      groupBox.appendChild(wordDiv);
+    });
+  
+    puzzle.appendChild(groupBox);
+  }
 
   evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;

@@ -170,23 +170,35 @@ button:disabled {
 }
 
 #puzzle {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns like NYT Connections */
-  gap: 10px;
-  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
   margin: 20px auto;
 }
 
-.word-tile {
-  padding: 10px;
-  background-color: #f0f0f0;
+.category-group {
+  border: 1px solid #ccc;
   border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  padding: 10px;
 }
 
-.word-tile:hover {
-  background-color: #dbeafe;
+.category-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.word-tile {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: default;
+}
+
+.word-tile.grouped {
+  background-color: #e0f2fe;
 }
