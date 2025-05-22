@@ -168,3 +168,25 @@ button:disabled {
 .chat-message.model.correct {
   background-color: #4CAF50;
 }
+
+#puzzle {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns like NYT Connections */
+  gap: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.word-tile {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.word-tile:hover {
+  background-color: #dbeafe;
+}

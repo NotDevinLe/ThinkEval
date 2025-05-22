@@ -61,7 +61,14 @@ evaluateBtn.addEventListener("click", async () => {
   randomized = shuffle(randomized);
 
   const puzzle = document.getElementById("puzzle");
-  puzzle.innerHTML = JSON.stringify(game);
+  puzzle.innerHTML = ""; // Clear existing content
+
+  randomized.forEach(word => {
+  const wordDiv = document.createElement("div");
+  wordDiv.className = "word-tile";
+  wordDiv.textContent = word;
+  puzzle.appendChild(wordDiv);
+});
 
   evaluate(model1, "left", () => {
     modelName1.textContent = `Model: ${model1}`;
