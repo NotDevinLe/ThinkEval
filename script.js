@@ -73,36 +73,58 @@ evaluateBtn.addEventListener("click", async () => {
 });
 
 // Vote Here
-vote1Btn.addEventListener("click", async () => {
-  const model1 = document.getElementById("model-select-1").value;
-  if (modelName1.textContent.includes("(waiting...)")) return;
-  await addDoc(collection(db, "Votes"), {
-    votedFor: model1,
-    modelPosition: "left",
-    timestamp: Date.now()
-  });
-  console.log("Voted for:", model1);
-});
 
-vote2Btn.addEventListener("click", async () => {
-    const model2 = document.getElementById("model-select-2").value;
+vote1Btn.addEventListener("click", async () => {
+    const model1 = document.getElementById("model-select-1").value;
+    if (modelName1.textContent.includes("(waiting...)")) return;
+  
+    const modelRef = doc(db, "ModelPerformance", model1);
+    const modelSnap = await getDoc(modelRef);
+  
+    let currentElo = 1000; // default starting ELO
+  
+    if (modelSnap.exists()) {
+      currentElo = modelSnap.data().elo || 1000;
+    } else {
+      // Add model with initial ELO
+      await setDoc(modelRef, { elo: currentElo });
+      console.log(`Model ${model1} added to database with ELO ${currentElo}`);
+    }
+  
+    const updatedElo = currentElo + 10;
+  
+    await updateDoc(modelRef, {
+      elo: updatedElo
+    });
+  
+    console.log(`Updated ELO for ${model1} to ${updatedElo}`);
+  });
+
+
+  vote2Btn.addEventListener("click", async () => {
+    const model2 = document.getElementById("model-select-1").value;
     if (modelName2.textContent.includes("(waiting...)")) return;
   
     const modelRef = doc(db, "ModelPerformance", model2);
     const modelSnap = await getDoc(modelRef);
   
+    let currentElo = 1000; // default starting ELO
+  
     if (modelSnap.exists()) {
-      const currentElo = modelSnap.data().elo || 1000;
-      const updatedElo = currentElo + 10;
-  
-      await updateDoc(modelRef, {
-        elo: updatedElo
-      });
-  
-      console.log(`Updated ELO for ${model2} to ${updatedElo}`);
+      currentElo = modelSnap.data().elo || 1000;
     } else {
-      console.error("Model not found:", model2);
+      // Add model with initial ELO
+      await setDoc(modelRef, { elo: currentElo });
+      console.log(`Model ${model2} added to database with ELO ${currentElo}`);
     }
+  
+    const updatedElo = currentElo + 10;
+  
+    await updateDoc(modelRef, {
+      elo: updatedElo
+    });
+  
+    console.log(`Updated ELO for ${model2} to ${updatedElo}`);
   });
 
 async function evaluate(model, side, onComplete, game, randomized) {
