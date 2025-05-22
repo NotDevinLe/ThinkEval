@@ -6,31 +6,51 @@ from puzzle_generator.utils import extract_groups_from_llm_output, get_all_words
 from puzzle_generator.config import OPENAI_API_KEY
 
 import random
+import json
 
-# Generate random seed words to inspire the puzzle
-with open("words.txt") as f: 
-    word_pool = f.read().splitlines()
+def generate():
+    # Generate random seed words to inspire the puzzle
+    with open("words.txt") as f: 
+        word_pool = f.read().splitlines()
 
-random_words = random.sample(word_pool, 4)
+    random_words = random.sample(word_pool, 4)
 
 
-# Step 1: Generate story + initial puzzle draft from LLM
-story_output = generate_story_and_category(random_words)
-print("\n=== Raw LLM Output ===\n", story_output)
+    # Step 1: Generate story + initial puzzle draft from LLM
+    story_output = generate_story_and_category(random_words)
+    print("\n=== Raw LLM Output ===\n", story_output)
 
-# Step 2: Parse LLM output into structured categories and words
-groups = extract_groups_from_llm_output(story_output)
-print("\n=== Extracted Groups ===\n", groups)
+    # Step 2: Parse LLM output into structured categories and words
+    groups = extract_groups_from_llm_output(story_output)
+    print("\n=== Extracted Groups ===\n", groups)
 
-# Step 3: Rank by difficulty using sentence embeddings
-all_words = get_all_words(groups)
-ranked = get_most_similar_groups(all_words)
-print("\n=== Ranked Word Groups by Similarity ===\n", ranked)
+    # Step 3: Rank by difficulty using sentence embeddings
+    all_words = get_all_words(groups)
+    ranked = get_most_similar_groups(all_words)
+    print("\n=== Ranked Word Groups by Similarity ===\n", ranked)
 
-# Step 4: Add difficulty logic (false group prompts)
-false_group_prompts = create_false_group_tree(list(groups.values())[0])
-print("\n=== False Group Prompts ===\n", false_group_prompts)
+    # Step 4: Add difficulty logic (false group prompts)
+    false_group_prompts = create_false_group_tree(list(groups.values())[0])
+    print("\n=== False Group Prompts ===\n", false_group_prompts)
 
-# Step 5: Edit category names with LLM
-final = edit_category_names(OPENAI_API_KEY, groups)
-print("\n=== Edited Categories ===\n", final)
+    # Step 5: Edit category names with LLM
+    final = edit_category_names(OPENAI_API_KEY, groups)
+    print("\n=== Edited Categories ===\n", final)
+
+    result = {}
+    lines = [line.strip() for line in final.strip().split("\n") if line.strip()]
+
+    for i in range(0, len(lines), 2):
+        result[lines[i][10:]] = lines[i + 1][7:].split(", ")
+    return result
+
+games = []
+
+while len(games) < 50:
+    try:
+        games.append(generate())
+    except Exception as e:
+        continue
+
+with open("gpt4games.json", 'w') as f:
+    json.dump(games, f, indent=2)
