@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="script.js" defer></script>
+</head>
+<body>
+      <div class="evaluate-container">
+        <h1>Play Generated Puzzles:</h1>
+        <div id="message" class="message">
+
+        </div>
+        <div id="board">
+    
+        </div>
+    
+        <div class="model-col">
+        <label for="model-select" class="debug-label">Choose a model:</label>
+        <select id="model-select" name="model" class="debug-select">
+            <option value="bart-mnli">BART-MNLI</option>
+            <option value="ada-002">ADA-002</option>
+            <option value="all-mpnet-base-v2">All-MPNet Base-v2</option>
+            <option value="flan-ul2">Flan-UL2</option>
+            <option value="llama-2">LLAMA-2</option>
+            <option value="gpt-4">GPT-4</option>
+        </select>
+        <div id="model-name" class="model-name">Model: (waiting...)</div>
+        <div class="board"></div>
+    
+        <div id="buttons" class="buttons">
+          <button id="generate" class="submit" type="button">Generate</button>
+          <button id="good" class="vote" type="button">Good</button>
+          <button id="bad" class="vote" type="button">Bad</button>
+          <button id="send" class="submit" type="button">Send</button>
+        </div>
+    
+        <h1>Leaderboard</h1>
+        <div class="leaderboard-box" id="leaderboard-box"></div>
+      </div>
+</body>
+</html>

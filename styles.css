@@ -1,0 +1,255 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  padding: 0;
+  margin: auto;
+  max-width: 100%;
+}
+
+h1 {
+  color: #111827;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+select {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.leaderboard-box {
+  margin-top: 1rem;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+
+.leaderboard-entry {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.leaderboard-entry:last-child {
+  border-bottom: none;
+}
+
+button {
+  width: 150px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.submit {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.submit:hover:enabled {
+  background-color: #2563eb;
+}
+
+.vote {
+  background-color: #fd4e37;
+  color: white;
+}
+
+.vote:hover:enabled {
+  background-color: #d3401c;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.evaluate-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arena {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.model-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+}
+
+.chatbox {
+  width: 100%;
+  height: 300px;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.chat-message {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  max-width: 100%;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  background-color: #e6e6e6;
+  float: left;
+  text-align: left;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.model-name-tag {
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #6b7280;
+}
+
+.debug-label,
+.debug-select {
+  display: none;
+}
+
+.debug-visible .debug-label,
+.debug-visible .debug-select {
+  display: block;
+}
+
+.chat-message.model.correct {
+  background-color: #4CAF50;
+}
+
+#puzzle {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.category-group {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.category-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.word-tile {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: default;
+}
+
+.word-tile.grouped {
+  background-color: #e0f2fe;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.word-tile-game {
+  background-color: #f9f9f9;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.word-tile-game:hover {
+  background-color: #e6f0ff;
+  border-color: #339af0;
+}
+
+.word-tile-game.selected {
+  background-color: #cce5ff;
+  border-color: #339af0;
+  color: #003366;
+}
+
+.word-tile-game.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724; 
+  font-weight: bold;
+  cursor: default;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
+}
+
+.message {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 12px 16px;
+  background-color: #f0f4ff;
+  border: 2px solid #339af0;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a3d7c;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: opacity 0.3s ease;
+}
