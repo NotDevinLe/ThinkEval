@@ -3,7 +3,7 @@ from puzzle_generator.tree_of_thought import tree_of_thought_generate
 from puzzle_generator.difficulty_logic import choose_final_words_per_group
 import random
 
-GENERATION_MODE = "tot"  # options: "cot" or "tot"
+GENERATION_MODE = "cot"  # options: "cot" or "tot"
 TARGET_DIFFICULTY = "hard"
 
 with open("words.txt") as f:
